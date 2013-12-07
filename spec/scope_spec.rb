@@ -32,4 +32,17 @@ describe DSJSRB do
     variable_name_value 'a', 200
     variable_name_value 'b', 200
   end
+
+  describe "subscopes" do
+    it "should allow instantiate nested scopes" do
+      js_context.global_scope.should respond_to(:create_scope)
+    end
+
+    it "should inherit variables" do
+      ctx = js_context
+      subscope = ctx.global_scope.create_scope 
+      ctx.global_scope.set_attribute(:a, 100)
+      subscope.get_attribute(:a).should be == 100
+    end
+  end
 end
