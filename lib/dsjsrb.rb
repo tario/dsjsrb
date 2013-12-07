@@ -22,7 +22,7 @@ module DSJSRB
         when :number
           tree[2]
         when :array
-          [1,2,3]
+          tree[2..-1].map(&method(:eval_literal))
         when :string
           eval tree[2]
         else
