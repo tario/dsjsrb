@@ -11,7 +11,16 @@ describe DSJSRB do
     end
   end
 
-  (1..5).each do |number|
-    expr_should_evaluate(number.to_s,number.to_f)
+  describe "number evaluation" do
+    (1..5).each do |number|
+      expr_should_evaluate(number.to_s,number.to_f)
+    end
+  end 
+
+  describe "string evaluation" do
+    ['foo', 'bar'].each do |str|
+      expr_should_evaluate("\"#{str}\"",str)
+      expr_should_evaluate("\'#{str}\'",str)
+    end
   end
 end
