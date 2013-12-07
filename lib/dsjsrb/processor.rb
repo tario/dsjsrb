@@ -13,6 +13,10 @@ module DSJSRB
             end
           when :string
             s(:str, eval(tree[2]))
+          when :resolve
+            s(:call, s(:lvar, :global_scope), :get_attribute, s(:lit, :a))
+          else
+            raise "unrecognized expression type #{tree[1]}"
         end
       when :source_elements
         process(tree[-1])
