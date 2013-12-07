@@ -20,6 +20,12 @@ module DSJSRB
         end
       when :source_elements
         process(tree[-1])
+      when :block
+        s(:iter, 
+          s(:call, 
+            s(:call, s(:const, :JSObject), :new), :tap), 
+              s(:args, :obj), 
+              s(:call, s(:lvar, :obj), :set_attribute, s(:lit, :a), s(:lit, 1.0)))
       else
         raise "unrecognize node type #{tree[0]}"
       end
