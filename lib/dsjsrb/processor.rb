@@ -14,7 +14,7 @@ module DSJSRB
           when :string
             s(:str, eval(tree[2]))
           when :resolve
-            s(:call, s(:lvar, :global_scope), :get_attribute, s(:lit, :a))
+            s(:call, s(:lvar, :global_scope), :get_attribute, s(:lit, tree[2].to_sym))
           else
             raise "unrecognized expression type #{tree[1]}"
         end
