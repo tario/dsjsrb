@@ -11,5 +11,9 @@ class JSObject
   def get_attribute(attr_name)
     @hash[attr_name]
   end
+
+  def create_scope
+    dup
+  end
 end
 end
