@@ -58,7 +58,7 @@ describe DSJSRB::JSObject do
         obj = DSJSRB::JSObject.new
         obj2 = DSJSRB::JSObject.create(obj)
 
-        obj.set_attribute(:a, 100)
+        obj.define_attribute(:a, 100)
         obj2.get_attribute(:a).should be == 100
       end
 
@@ -66,8 +66,8 @@ describe DSJSRB::JSObject do
         obj = DSJSRB::JSObject.new
         obj2 = DSJSRB::JSObject.create(obj)
 
-        obj.set_attribute(:a, 100)
-        obj2.set_attribute(:a, 200)
+        obj.define_attribute(:a, 100)
+        obj2.define_attribute(:a, 200)
         obj.get_attribute(:a).should be == 100
       end
 
@@ -75,8 +75,8 @@ describe DSJSRB::JSObject do
         obj = DSJSRB::JSObject.new
         obj2 = DSJSRB::JSObject.create(obj)
 
-        obj.set_attribute(:a, 100)
-        obj2.set_attribute(:a, 200)
+        obj.define_attribute(:a, 100)
+        obj2.define_attribute(:a, 200)
         obj2.get_attribute(:a).should be == 200
       end
     end

@@ -5,6 +5,10 @@ class JSObject
     def new
       Class.new(JSObject).original_new
     end
+
+    def create(obj)
+      Class.new(obj.class).original_new
+    end
   end
 
   def set_attribute(attr_name, value)
