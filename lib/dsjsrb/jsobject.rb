@@ -23,6 +23,12 @@ class JSObject
     end
   end
 
+  def remove_attribute(attr_name)
+    self.class.class_eval do
+      remove_method attr_name
+    end
+  end
+
   def get_attribute(attr_name)
     send(attr_name)
   end
