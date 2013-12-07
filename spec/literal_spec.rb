@@ -23,4 +23,8 @@ describe DSJSRB do
       expr_should_evaluate("\'#{str}\'",str)
     end
   end
+
+  describe "array evaluation" do
+    expr_should_evaluate("[1,2,3]",[1,2,3])
+  end
 end
