@@ -9,23 +9,31 @@ describe DSJSRB do
   describe "literal object expressions" do
     context "with one attribute" do
       it "should parse object" do
-        obj = js_context.eval_expr('{a:1}')
-        obj.get_attribute(:a).should be == 1.to_f
+        js_context.tap do |ctx|
+          ctx.eval_expr('obj = {a:1}')
+          ctx.global_scope.get_attribute(:obj).get_attribute(:a).should be == 1.to_f
+        end
       end
 
       it "should parse object" do
-        obj = js_context.eval_expr('{b:1}')
-        obj.get_attribute(:b).should be == 1.to_f
+        js_context.tap do |ctx|
+          ctx.eval_expr('obj = {b:1}')
+          ctx.global_scope.get_attribute(:obj).get_attribute(:b).should be == 1.to_f
+        end
       end
 
       it "should parse object" do
-        obj = js_context.eval_expr('{a:2}')
-        obj.get_attribute(:a).should be == 2.to_f
+        js_context.tap do |ctx|
+          ctx.eval_expr('obj = {a:2}')
+          ctx.global_scope.get_attribute(:obj).get_attribute(:a).should be == 2.to_f
+        end
       end
 
       it "should parse object" do
-        obj = js_context.eval_expr('{b:2}')
-        obj.get_attribute(:b).should be == 2.to_f
+        js_context.tap do |ctx|
+          ctx.eval_expr('obj = {b:2}')
+          ctx.global_scope.get_attribute(:obj).get_attribute(:b).should be == 2.to_f
+        end
       end
     end
 
