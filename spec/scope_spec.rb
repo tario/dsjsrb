@@ -44,5 +44,15 @@ describe DSJSRB do
       ctx.global_scope.set_attribute(:a, 100)
       subscope.get_attribute(:a).should be == 100
     end
+
+    describe "#set_attribute" do
+      it "should allow changing parent scope" do
+        ctx = js_context
+        subscope = ctx.global_scope.create_scope 
+        ctx.global_scope.set_attribute(:a, 100)
+        subscope.set_attribute(:a, 200)
+        ctx.global_scope.get_attribute(:a).should be == 200
+      end
+    end
   end
 end
