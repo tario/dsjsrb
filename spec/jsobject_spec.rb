@@ -79,6 +79,16 @@ describe DSJSRB::JSObject do
         obj2.define_attribute(:a, 200)
         obj2.get_attribute(:a).should be == 200
       end
+
+      it "should allow remove properties" do
+        obj = DSJSRB::JSObject.new
+        obj2 = DSJSRB::JSObject.create(obj)
+
+        obj.define_attribute(:a, 100)
+        obj2.define_attribute(:a, 200)
+        obj2.remove_attribute(:a)
+        obj2.get_attribute(:a).should be == 100
+      end
     end
   end
 
