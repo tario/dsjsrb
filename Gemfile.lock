@@ -1,0 +1,17 @@
+GEM
+  specs:
+    rkelly (1.0.7)
+    ruby2ruby (2.0.6)
+      ruby_parser (~> 3.1)
+      sexp_processor (~> 4.0)
+    ruby_parser (3.2.2)
+      sexp_processor (~> 4.1)
+    sexp_processor (4.4.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  rkelly
+  ruby2ruby
+  sexp_processor
