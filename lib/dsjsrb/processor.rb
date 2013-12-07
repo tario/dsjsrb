@@ -25,12 +25,16 @@ module DSJSRB
       when :number
         s(:lit, tree[1])
       when :object_literal
-            p tree
+        assignation_block = s(:block)
+        tree[1..-1].each do |subtree|
+          assignation_block << s(:call, s(:lvar, :obj), :set_attribute, s(:lit, subtree[1]), process(subtree[2]))
+        end
+
         s(:iter, 
           s(:call, 
             s(:call, s(:const, :JSObject), :new), :tap), 
-              s(:args, :obj), 
-              s(:call, s(:lvar, :obj), :set_attribute, s(:lit, tree[1][1]), process(tree[1][2])))
+              s(:args, :obj),
+              assignation_block)
       else
         raise "unrecognize node type #{tree[0]}"
       end
