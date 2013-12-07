@@ -25,7 +25,7 @@ module DSJSRB
           s(:call, 
             s(:call, s(:const, :JSObject), :new), :tap), 
               s(:args, :obj), 
-              s(:call, s(:lvar, :obj), :set_attribute, s(:lit, :a), s(:lit, 1.0)))
+              s(:call, s(:lvar, :obj), :set_attribute, s(:lit, tree[2][1]), process(tree[2][2])))
       else
         raise "unrecognize node type #{tree[0]}"
       end
