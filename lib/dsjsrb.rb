@@ -1,7 +1,7 @@
 module DSJSRB
   class Context
     def eval_expr(code)
-      nil
+      code.to_f
     end
   end
 end
