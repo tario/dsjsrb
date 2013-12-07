@@ -19,7 +19,7 @@ module DSJSRB
       ast = @parser.parse(code)
       s_ = ast.to_real_sexp
       ruby_tree = @processor.process(s_)
-      global_scope = self.global_scope
+      current_scope = self.global_scope
 
       eval(Ruby2Ruby.new.process ruby_tree)
     end
