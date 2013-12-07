@@ -1,6 +1,6 @@
 require "dsjsrb"
 
-describe DSJSRB do
+describe DSJSRB::JSObject do
   # each context has a global scope with variables
   let :js_context do
     DSJSRB::Context.new
@@ -51,4 +51,35 @@ describe DSJSRB do
       end
     end
   end
+
+  describe "#create" do
+    context "when object is created from another" do
+      it "should inherit properties" do
+        obj = DSJSRB::JSObject.new
+        obj2 = DSJSRB::JSObject.create(obj)
+
+        obj.set_attribute(:a, 100)
+        obj2.get_attribute(:a).should be == 100
+      end
+
+      it "should NOT overwrite properties" do
+        obj = DSJSRB::JSObject.new
+        obj2 = DSJSRB::JSObject.create(obj)
+
+        obj.set_attribute(:a, 100)
+        obj2.set_attribute(:a, 200)
+        obj.get_attribute(:a).should be == 100
+      end
+
+      it "should allow write own properties" do
+        obj = DSJSRB::JSObject.new
+        obj2 = DSJSRB::JSObject.create(obj)
+
+        obj.set_attribute(:a, 100)
+        obj2.set_attribute(:a, 200)
+        obj2.get_attribute(:a).should be == 200
+      end
+    end
+  end
+
 end
