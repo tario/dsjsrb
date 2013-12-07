@@ -17,10 +17,19 @@ describe DSJSRB do
       ctx.global_scope.get_attribute(:a).should be == 100
     end
 
-    it "should allow read attributes as locals" do
-      ctx = js_context
-      ctx.global_scope.set_attribute(:a, 100)
-      ctx.eval_expr('a').should be == 100.to_f
+    def self.variable_name_value(var_name, value)
+      context "when variable name is '#{var_name}' and value is #{value}" do
+        it "should allow read attributes as locals" do
+          ctx = js_context
+          ctx.global_scope.set_attribute(var_name.to_sym, 100)
+          ctx.eval_expr(var_name).should be == 100.to_f
+        end
+      end
     end
+
+    variable_name_value 'a', 100
+    variable_name_value 'b', 100
+    variable_name_value 'a', 200
+    variable_name_value 'b', 200
   end
 end
