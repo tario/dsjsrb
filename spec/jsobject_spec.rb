@@ -52,6 +52,17 @@ describe DSJSRB::JSObject do
     end
   end
 
+  describe "object getters" do
+    it "should parse object" do
+      ctx = js_context
+      ctx.global_scope.set_attribute(:obj, DSJSRB::JSObject.new.tap do |obj|
+        obj.set_attribute(:a,300)
+      end)
+
+      ctx.eval_expr('obj.a').should be == 300
+    end
+  end
+
   describe "#create" do
     context "when object is created from another" do
       it "should inherit properties" do
