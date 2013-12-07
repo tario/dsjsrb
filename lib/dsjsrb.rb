@@ -1,14 +1,18 @@
 require "rkelly"
 require "sexp_processor"
 require "pry"
-require "dsjsrb/processor"
 require "ruby2ruby"
+require "dsjsrb/processor"
+require "dsjsrb/jsobject"
 
 module DSJSRB
   class Context
+    attr_reader :global_scope
+
     def initialize
       @parser = RKelly::Parser.new
       @processor = DSJSRB::Processor.new
+      @global_scope = DSJSRB::JSObject.new
     end
 
     def eval_expr(code)
