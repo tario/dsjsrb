@@ -17,6 +17,12 @@ module DSJSRB
             s(:call, s(:lvar, :current_scope), :get_attribute, s(:lit, tree[2].to_sym))
           when :op_equal
             s(:call, s(:call, nil, :current_scope), :set_attribute, s(:lit, tree[2][1].to_sym), process(tree[3]))
+          when :dot_accessor
+            s(:call,
+              s(:call, s(:lvar, :current_scope), :get_attribute, s(:lit, tree[3].to_sym)),
+              :get_attribute,
+              s(:lit, tree[4].to_sym)
+              )
           else
             raise "unrecognized expression type #{tree[1]}"
         end
