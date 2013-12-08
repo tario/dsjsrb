@@ -83,6 +83,19 @@ describe DSJSRB::JSObject do
       ctx.eval_expr('obj.a = 300')
       ctx.global_scope.get_attribute(:obj).get_attribute(:a).should be == 300.to_f
     end
+
+    context "when multiple dots" do
+      it "should write attribute" do
+        ctx = js_context
+        a = DSJSRB::JSObject.new
+        obj = DSJSRB::JSObject.new
+        obj.set_attribute(:a, a)
+
+        ctx.global_scope.set_attribute(:obj, obj)
+        ctx.eval_expr('obj.a.x = 4')
+        ctx.global_scope.get_attribute(:obj).get_attribute(:a).get_attribute(:x).should be == 4
+      end
+    end    
   end
 
   describe "#create" do
