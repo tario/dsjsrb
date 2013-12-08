@@ -20,9 +20,9 @@ module DSJSRB
             s(:call, s(:call, nil, :current_scope), :set_attribute, s(:lit, tree[1][1].to_sym), process(tree[2]))
           when :dot_accessor
             s(:call,
-              s(:call, s(:lvar, :current_scope), :get_attribute, s(:lit, tree[1][2].to_sym)),
+              process_expresion(tree[1][1..-2]),
               :set_attribute,
-              s(:lit, tree[1][3].to_sym),
+              s(:lit, tree[1][-1].to_sym),
               process(tree[2])
               )
           else
