@@ -53,13 +53,22 @@ describe DSJSRB::JSObject do
   end
 
   describe "object getters" do
-    it "should parse object" do
+    it "should read attribute" do
       ctx = js_context
       ctx.global_scope.set_attribute(:obj, DSJSRB::JSObject.new.tap do |obj|
         obj.set_attribute(:a,300)
       end)
 
       ctx.eval_expr('obj.a').should be == 300
+    end
+  end
+
+  describe "object setters" do
+    it "should write attribute" do
+      ctx = js_context
+      ctx.global_scope.set_attribute(:obj, DSJSRB::JSObject.new)
+      ctx.eval_expr('obj.a = 300')
+      ctx.global_scope.get_attribute(:obj).get_attribute(:a).should be == 300.to_f
     end
   end
 
