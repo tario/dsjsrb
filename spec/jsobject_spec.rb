@@ -61,6 +61,19 @@ describe DSJSRB::JSObject do
 
       ctx.eval_expr('obj.a').should be == 300
     end
+
+    context "when multiple dots" do
+      it "should read attribute" do
+        ctx = js_context
+        a = DSJSRB::JSObject.new
+        obj = DSJSRB::JSObject.new
+        obj.set_attribute(:a, a)
+        a.set_attribute(:x,4)
+
+        ctx.global_scope.set_attribute(:obj, obj)
+        ctx.eval_expr('obj.a.x').should be == 4
+      end
+    end
   end
 
   describe "object setters" do
