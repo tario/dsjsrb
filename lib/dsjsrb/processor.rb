@@ -16,7 +16,19 @@ module DSJSRB
           when :resolve
             s(:call, s(:lvar, :current_scope), :get_attribute, s(:lit, tree[2].to_sym))
           when :op_equal
-            s(:call, s(:call, nil, :current_scope), :set_attribute, s(:lit, tree[2][1].to_sym), process(tree[3]))
+            case tree[2][0]
+            when :resolve
+              s(:call, s(:call, nil, :current_scope), :set_attribute, s(:lit, tree[2][1].to_sym), process(tree[3]))
+            when :dot_accessor
+              s(:call,
+                s(:call, s(:lvar, :current_scope), :get_attribute, s(:lit, tree[2][2].to_sym)),
+                :set_attribute,
+                s(:lit, tree[2][3].to_sym),
+                process(tree[3])
+                )
+            else
+              raise "unrecognized accessor type #{tree[2][0]}"
+            end
           when :dot_accessor
             s(:call,
               s(:call, s(:lvar, :current_scope), :get_attribute, s(:lit, tree[3].to_sym)),
