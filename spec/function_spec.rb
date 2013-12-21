@@ -76,5 +76,26 @@ describe DSJSRB::JSFunction do
       end
     end
   end
+
+  describe "function returning variables of parent scope" do
+    subject do
+      js_context.eval_expr("f = function(){return y; }")
+      js_context.global_scope.get_attribute(:f)
+    end
+
+    it_behaves_like "a callable object"
+
+    ["test", 0.0, nil].each do |value|
+      context "when set value of y = #{value.inspect}" do
+        before do
+          js_context.global_scope.set_attribute(:y, value)
+        end
+
+        it "should return #{value.inspect}" do
+          subject.call(value).should be == value 
+        end
+      end
+    end
+  end
 end
 
