@@ -11,6 +11,13 @@ describe DSJSRB::JSFunction do
     end
   end
 
+  shared_examples_for "a callable object returning" do |value|
+    it_behaves_like "a callable object"
+    it "should return" do
+      subject.call.should be == value
+    end
+  end
+
   describe "empty function" do
     subject do
       js_context.eval_expr("f = function(){}")
@@ -26,10 +33,7 @@ describe DSJSRB::JSFunction do
       js_context.global_scope.get_attribute(:f)
     end
 
-    it_behaves_like "a callable object"
-    it "should return nil" do
-      subject.call.should be == nil
-    end
+    it_behaves_like "a callable object returning", nil
   end
 end
 
