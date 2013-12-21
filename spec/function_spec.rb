@@ -61,5 +61,20 @@ describe DSJSRB::JSFunction do
     end
   end
 
+  describe "function receiving arguments" do
+    subject do
+      js_context.eval_expr("f = function(x){return x; }")
+      js_context.global_scope.get_attribute(:f)
+    end
+
+    it_behaves_like "a callable object"
+    ["test", 0.0, nil].each do |value|
+      context "when called with #{value.inspect}" do
+        it "should return #{value.inspect}" do
+          subject.call(value).should be == value 
+        end
+      end
+    end
+  end
 end
 
