@@ -112,5 +112,26 @@ describe DSJSRB::JSFunction do
       end
     end
   end
+
+  describe "function defining variables with same name of parent scope" do
+    subject do
+      js_context.eval_expr("f = function(){var y = 4; return y; }")
+      js_context.global_scope.get_attribute(:f)
+    end
+
+    it_behaves_like "a callable object"
+    context "when called after setting y to nil" do
+      it "y on global scope should remain unmodified" do
+        js_context.global_scope.set_attribute(:y, nil)
+        subject.call
+        js_context.global_scope.get_attribute(:y).should be == nil
+      end
+
+      it "should return 4" do
+        js_context.global_scope.set_attribute(:y, nil)
+        subject.call.should be == 4.0
+      end
+    end
+  end
 end
 
