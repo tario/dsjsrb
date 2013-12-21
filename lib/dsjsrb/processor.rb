@@ -58,8 +58,15 @@ module DSJSRB
             s(:call, s(:const, :JSObject), :new), :tap), 
               s(:args, :obj),
               assignation_block)
+      when :null
+        s(:nil)
+      when :return
+        s(:next, process(s(*tree[1..-1])))
+      when :function_body
+        subtree = tree[2]
+        subtree ? process(subtree) : s(:nil)
       when :function_expr
-        s(:iter, s(:call, nil, :lambda), s(:args))
+        s(:iter, s(:call, nil, :lambda), s(:args), process(tree[-1]))
       else
         raise "unrecognize node type #{tree[0]}"
       end
