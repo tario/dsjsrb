@@ -2,13 +2,13 @@
 module DSJSRB
   class Processor
 
-    def process_expresion(tree)
+    def process_expression(tree)
       case tree[0]
         when :number
           s(:lit, tree[1])
         when :array
           s(:array).tap do |s|
-            tree[1..-1].map(&method(:process_expresion)).each(&s.method(:<<))
+            tree[1..-1].map(&method(:process_expression)).each(&s.method(:<<))
           end
         when :string
           s(:str, eval(tree[1]))
@@ -17,13 +17,13 @@ module DSJSRB
         when :op_equal
           case tree[1][0]
           when :resolve
-            s(:call, s(:call, nil, :current_scope), :set_attribute, s(:lit, tree[1][1].to_sym), process_expresion(tree[2]))
+            s(:call, s(:call, nil, :current_scope), :set_attribute, s(:lit, tree[1][1].to_sym), process_expression(tree[2]))
           when :dot_accessor
             s(:call,
-              process_expresion(tree[1][1..-2]),
+              process_expression(tree[1][1..-2]),
               :set_attribute,
               s(:lit, tree[1][-1].to_sym),
-              process_expresion(tree[2])
+              process_expression(tree[2])
               )
           else
             raise "unrecognized accessor type #{tree[1][0]}"
@@ -31,7 +31,7 @@ module DSJSRB
         when :object_literal
           assignation_block = s(:block)
           tree[1..-1].each do |subtree|
-            assignation_block << s(:call, s(:lvar, :obj), :set_attribute, s(:lit, subtree[1]), process_expresion(subtree[2]))
+            assignation_block << s(:call, s(:lvar, :obj), :set_attribute, s(:lit, subtree[1]), process_expression(subtree[2]))
           end
 
           s(:iter, 
@@ -43,7 +43,7 @@ module DSJSRB
           s(:nil)
         when :dot_accessor
           s(:call,
-            process_expresion(tree[1..-2]),
+            process_expression(tree[1..-2]),
             :get_attribute,
             s(:lit, tree[-1].to_sym)
             )
@@ -64,7 +64,7 @@ module DSJSRB
 
           s(:iter, s(:call, s(:const, :JSFunction), :new), arguments, f_body)
         when :element
-          process_expresion(tree[1..-1])
+          process_expression(tree[1..-1])
         else
           raise "unrecognized expression type #{tree[0]}"
       end
@@ -73,13 +73,13 @@ module DSJSRB
     def process(tree)
       case tree[0]
       when :expression_statement
-          process_expresion(tree[1..-1])
+          process_expression(tree[1..-1])
       when :source_elements
         process(tree[-1])
       when :number
         s(:lit, tree[1])
       when :return
-        s(:next, process_expresion(s(*tree[1..-1])))
+        s(:next, process_expression(s(*tree[1..-1])))
       when :function_body
         subtree = tree[2]
         subtree ? process(subtree) : s(:next, s(:nil))
