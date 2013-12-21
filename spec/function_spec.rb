@@ -13,7 +13,7 @@ describe DSJSRB::JSFunction do
 
   shared_examples_for "a callable object returning" do |value|
     it_behaves_like "a callable object"
-    it "should return" do
+    it "should return #{value}" do
       subject.call.should be == value
     end
   end
@@ -44,5 +44,22 @@ describe DSJSRB::JSFunction do
 
     it_behaves_like "a callable object returning", 0.to_f
   end
+
+  describe "function returning object" do
+    subject do
+      js_context.eval_expr("f = function(){return {a: 1, b: 2}; }")
+      js_context.global_scope.get_attribute(:f)
+    end
+
+    it_behaves_like "a callable object"
+    it "should return obj.a == 1" do
+      subject.call.get_attribute(:a).should be == 1
+    end
+
+    it "should return obj.b == 2" do
+      subject.call.get_attribute(:b).should be == 2
+    end
+  end
+
 end
 
