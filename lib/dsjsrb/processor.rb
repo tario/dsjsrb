@@ -58,6 +58,8 @@ module DSJSRB
             s(:call, s(:const, :JSObject), :new), :tap), 
               s(:args, :obj),
               assignation_block)
+      when :function_expr
+        s(:iter, s(:call, nil, :lambda), s(:args))
       else
         raise "unrecognize node type #{tree[0]}"
       end

@@ -1,9 +1,9 @@
 require "rkelly"
 require "sexp_processor"
-require "pry"
 require "ruby2ruby"
 require "dsjsrb/processor"
 require "dsjsrb/jsobject"
+require "dsjsrb/jsfunction"
 
 module DSJSRB
   class Context
