@@ -48,7 +48,21 @@ module DSJSRB
             s(:lit, tree[-1].to_sym)
             )
         when :function_expr
-          s(:iter, s(:call, nil, :lambda), s(:args), process(tree[-1]))
+          arguments = s(:args)
+          f_body = s(:block)
+
+          tree[2].each do |argument|
+            arguments << argument.last.to_sym
+            f_body << s(:call, 
+                          s(:call, nil, :current_scope), 
+                          :define_attribute, 
+                          s(:lit, arguments.last), 
+                          s(:call, nil, arguments.last))
+          end
+
+          f_body << process(tree[-1])
+
+          s(:iter, s(:call, s(:const, :JSFunction), :new), arguments, f_body)
         when :element
           process_expresion(tree[1..-1])
         else
@@ -68,7 +82,7 @@ module DSJSRB
         s(:next, process_expresion(s(*tree[1..-1])))
       when :function_body
         subtree = tree[2]
-        subtree ? process(subtree) : s(:nil)
+        subtree ? process(subtree) : s(:next, s(:nil))
       else
         raise "unrecognize node type #{tree[0]}"
       end
