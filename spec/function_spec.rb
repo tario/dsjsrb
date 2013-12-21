@@ -35,5 +35,14 @@ describe DSJSRB::JSFunction do
 
     it_behaves_like "a callable object returning", nil
   end
+
+  describe "function returning 0" do
+    subject do
+      js_context.eval_expr("f = function(){return 0; }")
+      js_context.global_scope.get_attribute(:f)
+    end
+
+    it_behaves_like "a callable object returning", 0.to_f
+  end
 end
 
