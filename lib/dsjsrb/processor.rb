@@ -17,7 +17,7 @@ module DSJSRB
         when :op_equal
           case tree[1][0]
           when :resolve
-            s(:call, s(:call, s(:self), :current_scope), :set_attribute_no_local, s(:lit, tree[1][1].to_sym), process_expression(tree[2]))
+            s(:call, s(:call, s(:self), :current_scope), :set_attribute, s(:lit, tree[1][1].to_sym), process_expression(tree[2]))
           when :dot_accessor
             s(:call,
               process_expression(tree[1][1..-2]),

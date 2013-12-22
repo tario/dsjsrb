@@ -12,7 +12,7 @@ module DSJSRB
     def initialize
       @parser = RKelly::Parser.new
       @processor = DSJSRB::Processor.new
-      @global_scope = DSJSRB::JSObject.new
+      @global_scope = DSJSRB::JSScope.new
     end
 
     def eval_expr(code)
