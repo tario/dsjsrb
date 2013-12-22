@@ -133,5 +133,21 @@ describe DSJSRB::JSFunction do
       end
     end
   end
+
+  describe "function defining variables with complex expressions" do
+    subject do
+      js_context.eval_expr("f = function(){var y = function(){return 4; }; return y; }")
+      js_context.global_scope.get_attribute(:f)
+    end
+
+    it_behaves_like "a callable object"
+    it "should return a callable" do
+      subject.call.should respond_to(:call)
+    end
+
+    it "should return a callable, a function returning 4" do
+      subject.call.call.should be == 4.0
+    end
+  end
 end
 
