@@ -25,6 +25,9 @@ module DSJSRB
       eval(ruby_code)
     end
 
+    def current_scope
+      @global_scope
+    end
 private
 
     class MyRealSexpVisitor < RKelly::Visitors::Visitor

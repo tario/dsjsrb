@@ -13,11 +13,11 @@ module DSJSRB
         when :string
           s(:str, eval(tree[1]))
         when :resolve
-          s(:call, s(:lvar, :current_scope), :get_attribute, s(:lit, tree[1].to_sym))
+          s(:call, s(:call, s(:self), :current_scope), :get_attribute, s(:lit, tree[1].to_sym))
         when :op_equal
           case tree[1][0]
           when :resolve
-            s(:call, s(:call, nil, :current_scope), :set_attribute, s(:lit, tree[1][1].to_sym), process_expression(tree[2]))
+            s(:call, s(:call, s(:self), :current_scope), :set_attribute_no_local, s(:lit, tree[1][1].to_sym), process_expression(tree[2]))
           when :dot_accessor
             s(:call,
               process_expression(tree[1][1..-2]),
@@ -54,7 +54,7 @@ module DSJSRB
           tree[2].each do |argument|
             arguments << argument.last.to_sym
             f_body << s(:call, 
-                          s(:call, nil, :current_scope), 
+                          s(:call, s(:self), :current_scope), 
                           :define_attribute, 
                           s(:lit, arguments.last), 
                           s(:call, nil, arguments.last))
@@ -62,7 +62,9 @@ module DSJSRB
 
           f_body << process(tree[-1])
 
-          s(:iter, s(:call, s(:const, :JSFunction), :new), arguments, f_body)
+          s(:iter, s(:call, s(:const, :JSFunction), :new, s(:call, s(:self), :current_scope)), arguments, f_body)
+        when :assign_expr
+          process_expression(tree[1..-1])
         when :element
           process_expression(tree[1..-1])
         else
@@ -78,11 +80,21 @@ module DSJSRB
         process(tree[-1])
       when :number
         s(:lit, tree[1])
+      when :var_decl
+        s(:call, s(:call, s(:self), :current_scope), :define_attribute, s(:lit, tree[1].to_sym), process_expression(tree[-1]))
+      when :var_statement
+        process(tree[-1])
       when :return
         s(:next, process_expression(s(*tree[1..-1])))
       when :function_body
         subtree = tree[2]
-        subtree ? process(subtree) : s(:next, s(:nil))
+        if subtree
+          s(:block).tap do |ret|
+            tree[2..-1].map(&method(:process)).each(&ret.method(:<<))
+          end
+        else
+          s(:next, s(:nil))
+        end
       else
         raise "unrecognize node type #{tree[0]}"
       end

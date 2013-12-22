@@ -11,6 +11,27 @@ class JSObject
     end
   end
 
+  def set_attribute_no_local(attr_name, value)
+    unless respond_to?(attr_name)
+      # search maximal superclass
+      klass = self.class
+      while klass.superclass != JSObject
+        klass = klass.superclass
+      end
+      klass.class_eval do
+        define_method(attr_name) do
+          value
+        end
+      end
+    else
+      method(attr_name).owner.class_eval do
+        define_method(attr_name) do
+          value
+        end
+      end
+    end
+  end
+
   def set_attribute(attr_name, value)
     unless respond_to?(attr_name)
       define_attribute(attr_name, value)
